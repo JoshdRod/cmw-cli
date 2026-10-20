@@ -6,7 +6,8 @@ This tool can:
 
 Currently in a prototype stage.
 TODO LIST:
-☑️ Serialise a CMW with basic evidence
+
+- ☑️ Serialise a CMW with basic evidence
 - Serialise from both JSON and CBOR collections
 - Output to both JSON and CBOR formats
 - Seralise multiple files into the same CMW
