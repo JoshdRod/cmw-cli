@@ -1,0 +1,4 @@
+*.cbor
+!testdata/*
+
+*.swp

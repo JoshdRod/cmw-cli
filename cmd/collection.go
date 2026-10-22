@@ -14,11 +14,11 @@ import (
 // collectionCmd represents the collection command
 var collectionCmd = &cobra.Command{
 	Use:   "collection",
-	Short: "Create a Conceptual Message Wrapper for a (Currently JSON only) collection",
-	Long: `Create a Conceptual Message Wrapper for a (Currently JSON only) collection
+	Short: "Create a Conceptual Message Wrapper for a (CBOR only) collection",
+	Long: `Create a Conceptual Message Wrapper for a (CBOR only) collection
 For example:
 
-cmwcli collection --data collection.json`,
+cmwcli collection --data collection.cbor`,
 	Run: func(cmd *cobra.Command, args []string) {
 		// Read flags
 		data, err := cmd.Flags().GetString("data")
@@ -30,25 +30,36 @@ cmwcli collection --data collection.json`,
 		output, err := cmd.Flags().GetString("output")
 		if err != nil || data == "" {
 			fmt.Println("No output file specified")
+			return
 		}
 
 		// Read input
-		jsonCollection, err := os.ReadFile(data)
+		cborCollection, err := os.ReadFile(data)
 		if err != nil {
-			fmt.Println("Error accessing json collection at", data)
+			fmt.Println("Error accessing cbor collection at", data)
 			return
 		}
 
 		// Create collection
 		var cmwCollection cmw.CMW
-		cmwCollection.UnmarshalJSON(jsonCollection)
+		err = cmwCollection.UnmarshalCBOR(cborCollection)
+		if err != nil {
+			fmt.Println("Error marshalling input CBOR file to CMW")
+			return
+		}
 
 		// Write to output
 		fmt.Println(cmwCollection)
-		cmwBytes, _ := cmwCollection.MarshalJSON()
+		cmwBytes, err := cmwCollection.MarshalCBOR()
+		if err != nil {
+			fmt.Println("Error marshalling CMW collection to a CBOR file. Maybe check the input file is valid CBOR?")
+			return
+		}
+
 		err = os.WriteFile(output, cmwBytes, 0666)
 		if err != nil {
 			fmt.Println("Error writing to file")
+			return
 		}
 	},
 }
