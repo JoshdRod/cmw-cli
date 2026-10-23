@@ -8,13 +8,12 @@ Currently in a prototype stage.
 TODO LIST:
 
 - ☑️ Serialise a CMW with  a basic evidence CBOR
-- Seralise multiple files into the same CMW
+- ☑️ Seralise multiple files into the same CMW
 - Append CBOR evidence(s) to an existing CMW
 
 CURRENT PROGRESS:
 Currently, cmwcli can generate a CMW from a CBOR Collection, using the command `collection`. To run:
 
-`go run main.go collection --data collection.cbor --output out.cbor`
+`go run main.go collection --data file.cbor [--data file2.cbor ...] --output out.cbor [--cmwc_t "URI/OID" (the name of the collection that wraps the multiple cbor files input)]`
 
 Currently can only process and output CBOR files. (Should this be expanded to JSON and others as well?)
-Currently cannot handle wrapping multiple collections.
